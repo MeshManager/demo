@@ -59,7 +59,7 @@ async function syncThemeWithServer(username, jwt) {
             headers: { 'jwt': jwt }
         });
         const data = await response.json();
-        const isDark = data.darkmode === true || data.darkmode === "true";
+        const isDark = data === true || data === "true";
         localStorage.setItem('darkmode', isDark);
         if (isDark) {
             document.documentElement.setAttribute('data-theme', 'dark');

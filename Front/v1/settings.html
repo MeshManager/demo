@@ -135,7 +135,7 @@
         headers: { 'jwt': jwt }
       });
       const data = await response.json();
-      const isDark = data.darkmode === true || data.darkmode === "true";
+      const isDark = data === true || data === "true";
       toggle.checked = isDark;
       localStorage.setItem('darkmode', isDark);
       applyTheme(isDark);
@@ -150,7 +150,7 @@
             'jwt': jwt
           },
           body: JSON.stringify({
-            darkmode: toggle.checked
+            darkness: toggle.checked
           })
         });
         localStorage.setItem('darkmode', toggle.checked);
