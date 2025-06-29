@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>당근마켓</title>
+    <title>서울특별시 금천구 가산동 중고거래</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<script>
+    // 페이지 로드 시 localStorage의 다크모드 상태를 즉시 반영
+    (function() {
+        const theme = localStorage.getItem('darkmode');
+        if (theme === 'true') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    })();
+</script>
 <header>
     <div class="header-container">
         <div class="logo">
@@ -23,9 +32,7 @@
         </nav>
         <div class="search-container">
             <input type="text" placeholder="검색어를 입력해주세요">
-            <!-- 로그인 전 상태 -->
             <button id="loginBtn" class="chat-btn">로그인</button>
-            <!-- 로그인 후 상태 -->
             <div id="userInfo" style="display:none;">
                 <span id="usernameDisplay"></span>
                 <button id="settingsBtn" class="chat-btn">설정</button>
@@ -34,7 +41,6 @@
         </div>
     </div>
 </header>
-
 <main>
     <div class="main-header">
         <h2>서울특별시 금천구 가산동 중고거래</h2>
@@ -58,7 +64,6 @@
         </section>
     </div>
 </main>
-
 <script src="script.js"></script>
 <script src="auth.js"></script>
 </body>
