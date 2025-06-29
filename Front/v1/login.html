@@ -131,8 +131,21 @@
         localStorage.setItem('jwt', jwt);
         localStorage.setItem('username', username);
 
-        // 다크모드 상태 동기화
-        await syncThemeWithServer(username, jwt);
+        // 1. 로그인 직후 서버에서 다크모드 설정 받아오기
+        const darkRes = await fetch(`http://localhost:8080/api/v1/demo/darkmode/${username}`, {
+          headers: { 'jwt': jwt }
+        });
+        if (darkRes.ok) {
+          const data = await darkRes.json();
+          const isDark = data === true || data === "true";
+          localStorage.setItem('darkmode', isDark);
+          // 2. 즉시 다크모드 적용
+          if (isDark) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          } else {
+            document.documentElement.removeAttribute('data-theme');
+          }
+        }
 
         window.location.href = 'index.html';
       } else {
@@ -142,6 +155,7 @@
       document.getElementById('loginError').textContent = '서버 연결 오류';
     }
   });
+
 </script>
 </body>
 </html>
