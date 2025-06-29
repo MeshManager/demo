@@ -72,7 +72,7 @@
         const logoDiv = document.querySelector('.logo');
         try {
             // JWT 헤더 없이 요청
-            const response = await fetch('http://localhost:8080/api/v1/demo/logo');
+            const response = await fetch('http://k8s-istiosys-ingressa-695a06dfd9-175710291.ap-northeast-2.elb.amazonaws.com/user/v1/demo/logo');
             if (response.ok) {
                 const logoUrl = await response.text();
                 // URL이 http(s)로 시작하면 이미지로 교체
@@ -86,7 +86,7 @@
         }
 
         try {
-            const healthRes = await fetch('http://localhost:8080/api/v1/demo/health');
+            const healthRes = await fetch('http://k8s-istiosys-ingressa-695a06dfd9-175710291.ap-northeast-2.elb.amazonaws.com/user/v1/demo/health');
             if (healthRes.ok) {
                 // 헤더 바로 아래에 admin 메시지 추가
                 const header = document.querySelector('header');
