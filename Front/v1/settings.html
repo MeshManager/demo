@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사용자 설정 - 당근마켓</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .settings-wrapper {
+      min-height: 100vh;
+      background-color: #f8f9fa;
+      padding-top: 100px;
+    }
+
+    .settings-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+
+    .settings-header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #ff8a3d;
+    }
+
+    .settings-header h1 {
+      color: #333;
+      font-size: 28px;
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .setting-label {
+      font-size: 18px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #ff8a3d;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background: #6c757d;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+
+    .back-btn:hover {
+      background: #5a6268;
+    }
+  </style>
+</head>
+<body>
+<div class="settings-wrapper">
+  <div class="settings-container">
+    <div class="settings-header">
+      <h1>사용자 설정</h1>
+    </div>
+
+    <div class="setting-item">
+      <div class="setting-label">다크 모드</div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="darkModeToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <a href="index.html" class="back-btn">← 메인으로 돌아가기</a>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', async () => {
+    const toggle = document.getElementById('darkModeToggle');
+    const username = localStorage.getItem('username');
+    const jwt = localStorage.getItem('jwt');
+
+    // 현재 다크 모드 설정 불러오기
+    try {
+      const response = await fetch(`http://localhost:8080/api/v1/demo/darkmode/${username}`, {
+        headers: { 'jwt': jwt }
+      });
+      const data = await response.json();
+      toggle.checked = data === true || data === "true";
+
+      if (toggle.checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (error) {
+      console.error('Settings load error:', error);
+    }
+
+    // 다크 모드 토글 이벤트
+    toggle.addEventListener('change', async () => {
+      try {
+        await fetch(`http://localhost:8080/api/v1/demo/darkmode/${username}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'jwt': jwt
+          },
+          body: JSON.stringify({
+            darkness: toggle.checked
+          })
+        });
+
+        if (toggle.checked) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
+      } catch (error) {
+        console.error('Settings save error:', error);
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>당근마켓</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <div class="header-container">
+        <div class="logo">
+            <h1>carrot-shop</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">중고거래</a></li>
+                <li><a href="#">동네업체</a></li>
+                <li><a href="#">알바</a></li>
+                <li><a href="#">부동산</a></li>
+                <li><a href="#">동네생활</a></li>
+            </ul>
+        </nav>
+        <div class="search-container">
+            <input type="text" placeholder="검색어를 입력해주세요">
+            <!-- 로그인 전 상태 -->
+            <button id="loginBtn" class="chat-btn">로그인</button>
+            <!-- 로그인 후 상태 -->
+            <div id="userInfo" style="display:none;">
+                <span id="usernameDisplay"></span>
+                <button id="settingsBtn" class="chat-btn">설정</button>
+                <button id="logoutBtn" class="chat-btn">로그아웃</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="main-header">
+        <h2>서울특별시 금천구 가산동 중고거래</h2>
+    </div>
+    <div class="content-area">
+        <div class="filters">
+            <h3>필터</h3>
+            <div class="filter-option">
+                <input type="checkbox" id="nearbyOnly">
+                <label for="nearbyOnly">거래 가능만 보기</label>
+            </div>
+            <h3>위치</h3>
+            <ul class="location-list">
+                <li class="active"><a href="#">가산동</a></li>
+                <li><a href="#">독산동</a></li>
+                <li><a href="#">시흥동</a></li>
+            </ul>
+        </div>
+        <section class="item-list-section">
+            <div class="item-grid" id="item-grid"></div>
+        </section>
+    </div>
+</main>
+
+<script src="script.js"></script>
+<script src="auth.js"></script>
+</body>
+</html>
