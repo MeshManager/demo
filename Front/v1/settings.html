@@ -121,6 +121,13 @@
   }
 
   document.addEventListener('DOMContentLoaded', async () => {
+    const darkmodeAvailable = localStorage.getItem('darkmodeAvailable') === 'true';
+    if (!darkmodeAvailable) {
+      alert('설정 기능을 사용할 수 없습니다');
+      window.location.href = 'index.html';
+      return;
+    }
+
     const toggle = document.getElementById('darkModeToggle');
     const username = localStorage.getItem('username');
     const jwt = localStorage.getItem('jwt');

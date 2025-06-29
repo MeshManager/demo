@@ -25,9 +25,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('usernameDisplay')) {
             document.getElementById('usernameDisplay').textContent = username;
         }
+
+        // 다크모드 설정 가능 여부 확인
+        const darkmodeAvailable = localStorage.getItem('darkmodeAvailable') === 'true';
+        if (settingsBtn) {
+            settingsBtn.style.display = darkmodeAvailable ? 'inline-block' : 'none';
+        }
+
+        if (document.getElementById('usernameDisplay')) {
+            document.getElementById('usernameDisplay').textContent = username;
+        }
         // 서버에서 다크모드 동기화
         syncThemeWithServer(username, jwt);
     }
+
 
     if (loginBtn) {
         loginBtn.addEventListener('click', () => {

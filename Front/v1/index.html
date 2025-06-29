@@ -66,5 +66,25 @@
 </main>
 <script src="script.js"></script>
 <script src="auth.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const logoDiv = document.querySelector('.logo');
+        try {
+            // JWT 헤더 없이 요청
+            const response = await fetch('http://localhost:8080/api/v1/demo/logo');
+            if (response.ok) {
+                const logoUrl = await response.text();
+                // URL이 http(s)로 시작하면 이미지로 교체
+                if (logoUrl && /^https?:\/\//.test(logoUrl)) {
+                    logoDiv.innerHTML = `<img src="${logoUrl}" alt="carrot-shop logo" style="height:40px;">`;
+                }
+            }
+        } catch (error) {
+            // 실패 시 아무것도 안 함(기본 h1 유지)
+            console.warn('로고 이미지 로딩 실패:', error);
+        }
+    });
+</script>
 </body>
 </html>
