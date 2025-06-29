@@ -35,4 +35,9 @@ public class UserController {
         Void darkMode = userService.updateDarkmode(username, updateDarknessDTO.getDarkness());
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/logo")
+    ResponseEntity<String> getLogo() {
+        return ResponseEntity.ok("https://gogetyourgreen-images.s3.ap-northeast-2.amazonaws.com/logo.png");
+    }
 }

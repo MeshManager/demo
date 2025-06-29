@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>carrot-shop 당신 근처의 지역 생활 커뮤니티 로그인</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .login-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f8f9fa;
+    }
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 40px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .login-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .login-header h1 {
+      color: #ff8a3d;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    .login-header p {
+      color: #868e96;
+      font-size: 16px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+      width: 100%;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s;
+      text-align: center;
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: #ff8a3d;
+    }
+    .login-submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: #ff8a3d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .login-submit-btn:hover {
+      background: #e67a30;
+    }
+    .error-message {
+      color: #e74c3c;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+<div class="login-wrapper">
+  <div class="login-container">
+    <div class="login-header">
+      <h1>carrot-shop</h1>
+      <p>당신 근처의 지역 생활 커뮤니티</p>
+    </div>
+    <form id="loginForm">
+      <div class="form-group">
+        <input type="text" id="username" placeholder="사용자 이름" required>
+      </div>
+      <div class="form-group">
+        <input type="password" id="password" placeholder="비밀번호" required>
+      </div>
+      <button type="submit" class="login-submit-btn">로그인</button>
+      <p id="loginError" class="error-message"></p>
+    </form>
+  </div>
+</div>
+<script>
+  // 로그인 후 서버의 다크모드 상태를 localStorage에 저장
+  async function syncThemeWithServer(username, jwt) {
+    try {
+      const response = await fetch(`http://localhost:8080/api/v1/demo/darkmode/${username}`, {
+        headers: { 'jwt': jwt }
+      });
+      const data = await response.json();
+      const isDark = data.darkmode === true || data.darkmode === 'true';
+      localStorage.setItem('darkmode', isDark);
+    } catch (error) {}
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/demo/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userName: username, password })
+      });
+
+      if (response.status === 200) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(username);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const jwt = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        localStorage.setItem('jwt', jwt);
+        localStorage.setItem('username', username);
+
+        // 다크모드 설정 요청
+        let darkmodeAvailable = false;
+        try {
+          const darkRes = await fetch(`http://localhost:8080/api/v1/demo/darkmode/${username}`, {
+            headers: { 'jwt': jwt }
+          });
+
+          if (darkRes.ok) {
+            const data = await darkRes.json();
+            const isDark = data.darkmode === true || data.darkmode === "true";
+            localStorage.setItem('darkmode', isDark);
+            darkmodeAvailable = true;
+
+            // 즉시 다크모드 적용
+            if (isDark) {
+              document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+              document.documentElement.removeAttribute('data-theme');
+            }
+          }
+        } catch (error) {
+          console.error('다크모드 설정 요청 실패:', error);
+        }
+
+        // 다크모드 설정 가능 여부 저장
+        localStorage.setItem('darkmodeAvailable', darkmodeAvailable);
+
+        window.location.href = 'index.html';
+      } else {
+        document.getElementById('loginError').textContent = '잘못된 이름 또는 비밀번호';
+      }
+    } catch (error) {
+      document.getElementById('loginError').textContent = '서버 연결 오류';
+    }
+  });
+
+</script>
+</body>
+</html>
