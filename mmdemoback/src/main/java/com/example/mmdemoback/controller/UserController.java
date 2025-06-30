@@ -52,12 +52,7 @@ public class UserController {
         return ResponseEntity.ok("OK");
     }
 
-    @RequestMapping(value = "/darkmode/**", method = RequestMethod.OPTIONS)
-    public ResponseEntity<?> handleOptions() {
-        return ResponseEntity.ok().build();
-    }
-
-    @RequestMapping(value = "/user/**", method = RequestMethod.OPTIONS)
+    @RequestMapping(value = {"/darkmode/**", "/user/**"}, method = RequestMethod.OPTIONS)
     public ResponseEntity<?> handleOptions() {
         return ResponseEntity.ok().build();
     }
