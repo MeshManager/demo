@@ -12,7 +12,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/demo")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS})
 public class UserController {
 
     private final UserService userService;
