@@ -100,7 +100,7 @@
   // 로그인 후 서버의 다크모드 상태를 localStorage에 저장
   async function syncThemeWithServer(username, jwt) {
     try {
-      const response = await fetch(`http://localhost:8080/api/v1/demo/darkmode/${username}`, {
+      const response = await fetch(`http://k8s-istiosys-ingressa-695a06dfd9-175710291.ap-northeast-2.elb.amazonaws.com/dark/v1/demo/darkmode/${username}`, {
         headers: { 'jwt': jwt }
       });
       const data = await response.json();
@@ -133,7 +133,7 @@
         // 다크모드 설정 요청
         let darkmodeAvailable = false;
         try {
-          const darkRes = await fetch(`http://localhost:8080/api/v1/demo/darkmode/${username}`, {
+          const darkRes = await fetch(`http://k8s-istiosys-ingressa-695a06dfd9-175710291.ap-northeast-2.elb.amazonaws.com/dark/v1/demo/darkmode/${username}`, {
             headers: { 'jwt': jwt }
           });
 

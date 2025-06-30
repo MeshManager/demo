@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // 서버에서 다크모드 상태 동기화
 async function syncThemeWithServer(username, jwt) {
     try {
-        const response = await fetch(`http://localhost:8080/api/v1/demo/darkmode/${username}`, {
+        const response = await fetch(`http://k8s-istiosys-ingressa-695a06dfd9-175710291.ap-northeast-2.elb.amazonaws.com/dark/v1/demo/darkmode/${username}`, {
             headers: { 'jwt': jwt }
         });
         const data = await response.json();
